@@ -6,7 +6,7 @@ backlog = 2048
 
 # Worker processes
 workers = multiprocessing.cpu_count() * 2 + 1
-worker_class = "uvicorn.workers.UvicornWorker"  # This is important for FastAPI
+worker_class = "uvicorn.workers.UvicornWorker"
 worker_connections = 1000
 timeout = 30
 keepalive = 2
@@ -25,4 +25,7 @@ pidfile = None
 umask = 0
 user = None
 group = None
-tmp_upload_dir = None 
+tmp_upload_dir = None
+
+# Application
+wsgi_app = "app:application" 
