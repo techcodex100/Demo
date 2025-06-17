@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
@@ -6,9 +6,13 @@ from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph, 
 from reportlab.lib.styles import getSampleStyleSheet
 from io import BytesIO
 
-router = APIRouter()
+app = FastAPI()
 
-@router.get("/generate-pdf")
+@app.get("/")
+async def root():
+    return {"message": "Welcome to PDF Generator API"}
+
+@app.get("/generate-pdf")
 async def generate_pdf():
     # Create PDF buffer
     buffer = BytesIO()
@@ -93,4 +97,8 @@ async def generate_pdf():
     # Build PDF
     doc.build(elements)
     buffer.seek(0)
-    return StreamingResponse(buffer, media_type="application/pdf", headers={"Content-Disposition": "attachment; filename=invoice.pdf"}) 
+    return StreamingResponse(buffer, media_type="application/pdf", headers={"Content-Disposition": "attachment; filename=invoice.pdf"})
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000) 
